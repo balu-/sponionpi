@@ -68,6 +68,9 @@ if [ ! -f "install-init" ]; then
 	#prepare rerun after reboot
 	mypath="$(cd $(dirname $0); pwd)/$(basename $0)";
 	echo "@reboot root ${mypath}" > /etc/cron.d/install_part2;
+	
+	#wait 3 secounds till reboot
+	sleep 3;
 
 	#do reboot
 	/sbin/reboot;
