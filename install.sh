@@ -51,19 +51,31 @@ if [ ! -f "install-init" ]; then
 	sudo bash -c "echo 'SPONionPi' > /etc/hostname"|tee -a install.log;
 
 	echo "$(date +%s):">>install.log;
-	echo "Bitte starten Sie den Rechner neu, indem Sie den Strom unterbrechen."|tee -a install.log;
-	echo "Fuehren Sie im Anschluss das Installationsskript ERNEUT(!) aus mit folgenden Befehlen";
-	echo "		cd SPONionPi";
-	echo "		sudo sh install.sh"
+	#echo "Bitte starten Sie den Rechner neu, indem Sie den Strom unterbrechen."|tee -a install.log;
+	#echo "Fuehren Sie im Anschluss das Installationsskript ERNEUT(!) aus mit folgenden Befehlen";
+	#echo "		cd SPONionPi";
+	#echo "		sudo sh install.sh"
 	
-	sleep 600;
+	#sleep 600;
 	#echo "$(date +%s):">>install.log;
 	#echo "versuche eigenstaendigen Reboot"|tee -a install.log;
 
 	#echo "$(date +%s):">>install.log;
 	#sudo /etc/init.d/reboot stop|tee -a install.log;
 	#trotzdem strom reboot
+	
+	echo "Der Rechner startet jetzt neu und beendet im Anschluss die installation" | tee -a install.log;
+	#prepare rerun after reboot
+	mypath="$(cd $(dirname $0); pwd)/$(basename $0)";
+	echo "@reboot root ${mypath}" > /etc/cron.d/install_part2;
+
+	#do reboot
+	/sbin/reboot;
+	exit;
 fi
+
+#remove restart installation
+rm /etc/cron.d/install_part2;
 
 echo "$(date +%s):">>install.log;
 echo "fuehre Installation des sponionpi fort"|tee -a install.log;
